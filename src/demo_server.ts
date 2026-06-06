@@ -102,7 +102,7 @@ app.post('/simular', async (req, res) => {
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-flash-latest',
       contents: clientMessage,
       config: {
         systemInstruction: 'Eres un consultor experto en licencias de Atlassian. Analiza obligatoriamente lo que pide el cliente usando la herramienta de validación de políticas antes de responder. Tienes prohibido activar ventajas premium en planes estándar o aceptar permanencias inferiores a las reguladas.',
@@ -128,7 +128,7 @@ app.post('/simular', async (req, res) => {
       logHarness = `<strong>[Harness Log]</strong> La IA detectó la intención técnica. Datos enviados al validador:<br><pre>${JSON.stringify(args, null, 2)}</pre><br><strong>Resultado del Filtro Rígido:</strong> <span style="color:#dc3545; font-weight:bold;">${resultadoHerramienta}</span>`;
 
       const finalResponse = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: 'gemini-flash-latest',
         contents: [
           { role: 'user', parts: [{ text: clientMessage }] },
           { role: 'model', parts: [{ functionCall: call }] },
