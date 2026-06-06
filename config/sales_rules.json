@@ -1,0 +1,8 @@
+{
+  "max_automated_discount": 15.0,
+  "max_turns_budget": 5,
+  "products": {
+    "licencia_premium": 500.0,
+    "soporte_pack": 200.0
+  }
+}
