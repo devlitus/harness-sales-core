@@ -17,6 +17,7 @@
     }
   },
   "dependencies": {
+    "@google/genai": "^2.8.0",
     "express": "^5.2.1"
   },
   "devDependencies": {
