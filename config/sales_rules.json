@@ -1,15 +1,10 @@
 {
   "max_automated_discount": 15.0,
-  "max_turns_budget": 5,
-  "products": {
-    "jira_standard": 8.50,
-    "jira_premium": 16.00,
-    "confluence_standard": 6.50,
-    "confluence_premium": 11.50
-  },
   "forbidden_cross_tier_features": [
     "advanced_roadmaps",
-    "analytics_premium",
-    "guaranteed_sla_99"
-  ]
+    "analytics_premium"
+  ],
+  "politicas_de_contrato": {
+    "duracion_minima_meses": 6
+  }
 }
