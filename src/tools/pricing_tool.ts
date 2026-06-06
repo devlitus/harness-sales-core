@@ -4,26 +4,29 @@ import * as path from 'path';
 const rulesPath = path.join(__dirname, '../../config/sales_rules.json');
 const rules = JSON.parse(fs.readFileSync(rulesPath, 'utf-8'));
 
-interface QuoteInput {
+interface AtlassianQuoteInput {
   leadId: string;
-  items: string[];
-  discount: number;
+  product: string;
+  userCount: number;
+  requestedPremiumFeatures: string[];
 }
 
-export function executePricingTool(input: QuoteInput): string {
-  if (input.discount > rules.max_automated_discount) {
-    return `ERROR: Operación bloqueada por el Harness. El descuento del ${input.discount}% supera el límite máximo permitido del ${rules.max_automated_discount}%.`;
+export function executePricingTool(input: AtlassianQuoteInput): string {
+  const pricePerUser = rules.products[input.product];
+  
+  if (!pricePerUser) {
+    return `ERROR: El producto '${input.product}' no existe en el catálogo oficial de Atlassian.`;
   }
 
-  let subtotal = 0;
-  for (const item of input.items) {
-    const price = rules.products[item];
-    if (!price) {
-      return `ERROR: El producto '${item}' no existe en el catálogo oficial.`;
+  // Verificar si el cliente pide características Premium/Enterprise estando en un plan Standard
+  if (input.product.endsWith('_standard') && input.requestedPremiumFeatures.length > 0) {
+    for (const feature of input.requestedPremiumFeatures) {
+      if (rules.forbidden_cross_tier_features.includes(feature)) {
+        return `ERROR: Operación bloqueada por el Harness. El plan 'Standard' no permite la característica premium: [${feature}]. El cliente debe migrar todo el tier al plan Premium.`;
+      }
     }
-    subtotal += price;
   }
 
-  const totalConDescuento = subtotal * (1 - input.discount / 100);
-  return `ÉXITO: Cotización generada para el Lead ${input.leadId}. Subtotal: $${subtotal}. Descuento: ${input.discount}%. Total Final: $${totalConDescuento}.`;
+  const totalMensual = pricePerUser * input.userCount;
+  return `ÉXITO: Cotización calculada. Producto: ${input.product} para ${input.userCount} usuarios. Total Mensual de Lista: $${totalMensual}.`;
 }

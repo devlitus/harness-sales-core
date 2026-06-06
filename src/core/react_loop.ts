@@ -22,7 +22,12 @@ export async function runSalesHarness(userInput: string, chatHistory: any[]) {
     const mockAiDecision = {
       wantsToCallTool: true,
       toolName: "executePricingTool",
-      args: { leadId: "lead_99", items: ["licencia_premium"], discount: 20 }
+      args: {
+        leadId: "lead_99",
+        product: "confluence_standard",
+        userCount: 100,
+        requestedPremiumFeatures: ["analytics_premium"]
+      }
     };
 
     // EL HARNESS INTERCEPTA LA INTENCIÓN DE LA IA
